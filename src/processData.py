@@ -5,32 +5,32 @@ fin = open('train.csv','r')
 fout = open('train_processed.csv','w')
 writer = csv.writer(fout, delimiter=',')
 
-# Copio header en nuevos datos
+# Header
 line = fin.readline()
-writer.writerow(line.strip().split(',')[1:5])
+writer.writerow(line.strip().split(',')[1:371])
 
-# Preprocesamiento: se sacan registros con valores vacios o nulos y el activity_log y el user_id
-repeatBuyers = []
-nonRepeatBuyers = []
-print "Starting"
+satisfiedClients = []
+notSatisfiedClients = []
+
+print "Comienzo del procesamiento..."
+
 for line in fin.readlines():
-	data = [x for x in line.strip().split(',')[1:5] if x != '']
-	# Se sacan los registros que tengan valores que esten marcados como desconocidos segun el formato de cada atributo
-	if len(data) < 4 or data[0] == '0' or data[1] == '2' or data[3] == '-1':
-		continue
-	if data[3] == '1':
-		repeatBuyers.append(data)
-	elif data[3] == '0':
-		nonRepeatBuyers.append(data);
+	#En data saco la columna de ID
+	data = [x for x in line.strip().split(',')[1:371]]
+	#Si el target es 1 son clientes no satisfechos, si es 0 son satisfechos
+	if data[369] == "1":
+		notSatisfiedClients.append(data)
+	elif data[369] == "0":
+		satisfiedClients.append(data);
 
-# Tomo aleatoriamente la misma cantidad de registros que no se repitan
-shuffle(nonRepeatBuyers)
-nonRepeatBuyers = nonRepeatBuyers[:len(repeatBuyers)]
+# Tomo la misma cantidad de ambos conjuntos
+shuffle(satisfiedClients)
+satisfiedClients = satisfiedClients[:len(notSatisfiedClients)]
 
-# Los ordeno aleatoriamente y se escriben en nuevo archivo de datos
-toWrite = repeatBuyers + nonRepeatBuyers
+# Se escriben en el archivo aleatoriamente
+toWrite = satisfiedClients + notSatisfiedClients
 shuffle(toWrite)
 writer.writerows(toWrite)
 
-print "Repeat: " + str(len(repeatBuyers)) + " No Repeat: " + str(len(nonRepeatBuyers))
-print "Finished"
+print "Clientes satisfechos: " + str(len(satisfiedClients)) + " Clientes no satisfechos: " + str(len(notSatisfiedClients))
+print "Procesamiento finalizado"
