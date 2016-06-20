@@ -44,12 +44,15 @@ print "Testing..."
 fout = open('train_processed_results.csv','w')
 writer = csv.writer(fout, delimiter = ',')
 
+header = ["realNumber", "estimated"]
+writer.writerow(header)
+
 equals = 0
 for row in validate:
 	estimated = round(net.activate(row[:inputNumber])[0])
 	realNumber = row[inputNumber]
 	row.append(estimated)
-	writer.writerow(row)
+	writer.writerow(row[inputNumber:])
 	if realNumber == estimated:
 		equals += 1	
 
