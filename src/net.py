@@ -9,12 +9,12 @@ def file_len(fname):
             pass
     return i + 1
 
-fileLength = file_len('train_processed.csv') - 1
+fileLength = file_len('train_processed_reduced.csv') - 1
 
 trainLength = fileLength * 2 / 3
 
 
-fin = open('train_processed.csv','r')
+fin = open('train_processed_reduced.csv','r')
 line = fin.readline()
 inputNumber = len(line.strip().split(',')) - 1  
 
@@ -41,7 +41,7 @@ print "Training..."
 trainer.trainEpochs(10)
 
 print "Testing..."
-fout = open('train_processed_results.csv','w')
+fout = open('net_results.csv','w')
 writer = csv.writer(fout, delimiter = ',')
 
 header = ["realNumber", "estimated"]
